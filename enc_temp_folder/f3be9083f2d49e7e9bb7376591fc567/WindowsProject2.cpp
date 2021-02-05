@@ -207,6 +207,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 		//memcpy(szBuffer, (unsigned char*)pCopyData->lpData, length * sizeof(unsigned char));   // 输出 1,2,3,4,5
 		memcpy(pBuff, (unsigned char*)pCopyData->lpData, size);
+
 	}
 
 	default:
