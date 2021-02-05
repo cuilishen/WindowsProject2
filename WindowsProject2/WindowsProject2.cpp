@@ -4,6 +4,15 @@
 #include "framework.h"
 #include "WindowsProject2.h"
 
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+
+//#include "stdafx.h"
+#include "resource.h"
+#include <stdio.h>
+
 #define MAX_LOADSTRING 100
 
 // 全局变量:
@@ -111,6 +120,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
+
+
+
+
 //
 //  函数: WndProc(HWND, UINT, WPARAM, LPARAM)
 //
@@ -123,9 +136,16 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	const char szDlgTitle[] = "RecvMessage";
+	static HWND s_hEditShowRecv;
+
+
     switch (message)
     {
-
+	//case WM_INITDIALOG:
+	//	SetWindowText(hWnd, szDlgTitle);
+	//	//s_hEditShowRecv = GetDlgItem(hDlg, IDC_EDIT_RECVMESSAGE);
+	//	return TRUE;
     case WM_COMMAND:
         {
             int wmId = LOWORD(wParam);
@@ -154,11 +174,37 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
+	case WM_COPYDATA:
+	{
+		COPYDATASTRUCT *pCopyData = (COPYDATASTRUCT*)lParam;
+		int length = pCopyData->cbData;
+		unsigned char szBuffer[65536];
+		 //szBuffer = (char*)pCopyData->lpData;
+		//pCopyData->lpData;
+
+		memset(szBuffer, 0, sizeof(szBuffer));
+
+		/*int arr[] = { 1,2,3,4,5 };
+		int copy[5];
+		int len = sizeof(arr) / sizeof(arr[0]);*/
+
+		void * pBuff;
+		int size = 65536;
+		pBuff = malloc(size);
+		memcpy(pBuff, (unsigned char*)pCopyData->lpData, size);
+
+		
+
+		memcpy(szBuffer, (unsigned char*)pCopyData->lpData, length * sizeof(unsigned char));   // 输出 1,2,3,4,5
+
+	}
+
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
     return 0;
 }
+
 
 // “关于”框的消息处理程序。
 INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
